@@ -25,6 +25,6 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private ScoreStatus scoreStatus; // 채점 상태 [Checking, Success]
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne
     private Member member;
 }

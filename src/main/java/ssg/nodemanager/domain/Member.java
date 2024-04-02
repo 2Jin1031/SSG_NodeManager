@@ -18,4 +18,16 @@ public class Member {
     private String password;
 
     private int currentLevel;
+
+    protected Member() {
+
+    }
+
+    public Member(String loginId, String password) {
+        this.loginId = loginId;
+        this.password = password;
+        this.currentLevel = 1;
+    }
+
+
 }
