@@ -5,14 +5,14 @@
     <title>Login</title>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var memberIdInput = document.getElementById('memberId');
-            memberIdInput.oninvalid = function(e) {
+            var loginIdInput = document.getElementById('loginId');
+            loginIdInput.oninvalid = function(e) {
                 e.target.setCustomValidity("");
                 if (!e.target.validity.valid) {
                     e.target.setCustomValidity("회원 아이디를 입력해주세요.");
                 }
             };
-            memberIdInput.oninput = function(e) {
+            loginIdInput.oninput = function(e) {
                 e.target.setCustomValidity("");
             };
         });
@@ -22,9 +22,9 @@
 <h2>Login</h2>
 <form th:action="@{/login}" th:object="${loginForm}" method="post">
     <div>
-        <label for="memberId">id : </label>
-        <input type="text" id="memberId" th:field="*{memberId}" placeholder="test" required>
-        <div th:if="${#fields.hasErrors('memberId')}" th:errors="*{memberId}">회원 ID Error</div>
+        <label for="loginId">id : </label>
+        <input type="text" id="loginId" th:field="*{loginId}" placeholder="test" required>
+        <div th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">회원 ID Error</div>
     </div>
     <div>
         <label for="password">password : </label>

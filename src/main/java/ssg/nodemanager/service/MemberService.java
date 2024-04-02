@@ -1,8 +1,9 @@
-package ssg.nodemanager;
+package ssg.nodemanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ssg.nodemanager.repository.MemberRepository;
 import ssg.nodemanager.domain.Member;
 
 import java.util.Objects;
@@ -30,5 +31,17 @@ public class MemberService {
         }
 
         return true;
+    }
+
+    // 찾기
+    public Member findByLoginId(String loginId) {
+        Optional<Member> optionalFindMember = memberRepository.findByLoginId(loginId);
+
+        if (optionalFindMember.isEmpty()) {
+            throw new IllegalStateException("[ERROR] id를 찾을 수 없음");
+        }
+
+        return optionalFindMember.get();
+
     }
 }

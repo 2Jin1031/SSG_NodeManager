@@ -9,6 +9,6 @@ import lombok.Setter;
 public class LoginForm {
 
     @NotEmpty(message = "회원 아이디를 입력해주세요.")
-    private String memberId;
+    private String loginId;
     private String password;
 }

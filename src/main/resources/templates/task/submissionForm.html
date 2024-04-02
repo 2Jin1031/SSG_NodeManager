@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Submission</title>
+</head>
+<body>
+<h2>Task Submission Page</h2>
+<form action="#" th:action="@{/task/submission}" th:object="${form}" method="post">
+    <div>
+        <p>현재 과제 level: <span th:text="${form.currentLevel}"></span></p>
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" th:value="*{submissionUrl}" required/>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

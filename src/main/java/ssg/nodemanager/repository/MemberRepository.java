@@ -1,4 +1,4 @@
-package ssg.nodemanager;
+package ssg.nodemanager.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -21,4 +21,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
     Optional<Member> findByLoginId(String loginId);
+
+    Optional<Member> findById(Long id);
 }
