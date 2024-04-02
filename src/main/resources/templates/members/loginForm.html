@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login</h2>
+<form th:action="@{/login}" th:object="${loginForm}" method="post">
+    <div>
+        <label for="memberId">id : </label>
+        <input type="text" id="memberId" th:field="*{memberId}" placeholder="test" required>
+        <div th:if="${#fields.hasErrors('memberId')}" th:errors="*{memberId}">회원 ID Error</div>
+    </div>
+    <div>
+        <label for="password">password : </label>
+        <input type="password" id="password" th:field="*{password}">
+    </div>
+    <div>
+        <button type="submit">로그인</button>
+    </div>
+</form>
+</body>
+</html>
