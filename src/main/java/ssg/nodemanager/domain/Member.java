@@ -23,7 +23,6 @@ public class Member {
     private Task task;
 
     protected Member() {
-
     }
 
     public Member(String loginId, String password) {

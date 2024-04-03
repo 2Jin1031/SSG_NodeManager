@@ -15,8 +15,8 @@
             loginIdInput.oninput = function(e) {
                 e.target.setCustomValidity("");
             };
-            var LoginError2 = "${loginError2}";
-            if (LoginError2) {
+            var loginErrorByIdWithPassword = "${loginErrorByIdWithPassword}";
+            if (loginErrorByIdWithPassword) {
                 alert("아이디 또는 비밀번호가 잘못되었습니다. 올바르게 입력해주세요.");
             }
         });
