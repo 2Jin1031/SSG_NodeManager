@@ -19,6 +19,8 @@ public class Member {
 
     private int currentLevel;
 
+    private int nextLevel;
+
     @OneToOne(mappedBy = "member")
     private Task task;
 
@@ -29,6 +31,7 @@ public class Member {
         this.loginId = loginId;
         this.password = password;
         this.currentLevel = 1;
+        this.nextLevel = 2;
     }
 
 

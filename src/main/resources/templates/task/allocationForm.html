@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Allocation</title>
+</head>
+<body>
+
+<div>
+  <h2>Task Allocation</h2>
+
+  <!-- Assuming that the form attribute contains an instance of AllocationForm -->
+  <p>현재 과제 Level: <span th:text="${form.getCurrectLevel()}">1</span></p>
+  <p>Task for your level:</p>
+
+  <!-- Displaying the allocation URL and opening it in a new window/tab -->
+  <a th:href="${form.getAllocationUrl()}" target="_blank">Access your task here</a>
+
+</div>
+
+</body>
+</html>

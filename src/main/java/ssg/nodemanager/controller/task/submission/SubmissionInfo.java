@@ -1,4 +1,4 @@
-package ssg.nodemanager.controller.task;
+package ssg.nodemanager.controller.task.submission;
 
 import lombok.Getter;
 import lombok.Setter;

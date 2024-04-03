@@ -1,4 +1,4 @@
-package ssg.nodemanager.controller.task;
+package ssg.nodemanager.controller.task.submission;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +85,7 @@ public class SubmissionController {
         SubmissionInfo info = new SubmissionInfo();
         info.setCurrentLevel(member.getCurrentLevel());
         info.setScoreStatus(task.getScoreStatus());
-        info.setNextLevel(member.getCurrentLevel() + 1);
+        info.setNextLevel(member.getNextLevel());
 
         if (ScoreStatus.Success.equals(task.getScoreStatus())) {
             info.setSuccess(true);
