@@ -25,21 +25,24 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestParam("loginId") String loginId, HttpServletRequest request, Model model) {
+    public String login(@ModelAttribute("loginForm") LoginForm form,
+                        HttpServletRequest request,
+                        Model model) {
+
         // loginId의 유효성 검사
-        if (!StringUtils.hasText(loginId)) {
+        if (!StringUtils.hasText(form.getLoginId())) {
             model.addAttribute("loginError", "Login ID is required");
             return "members/loginForm";
         }
 
-        Member member = memberService.findByLoginId(loginId);
-        if (member != null) {
-            // 로그인 성공: 세션에 사용자 정보 저장
+        try {
+            memberService.signIn(form);
+
+            Member member = memberService.findByLoginId(form.getLoginId());
             request.getSession().setAttribute("loggedInMember", member);
             return "members/profile";
-        } else {
-            // 로그인 실패: 에러 메시지 설정
-            model.addAttribute("loginError", "Invalid login ID");
+        } catch (IllegalStateException e) {
+            model.addAttribute("loginError2", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "members/loginForm";
         }
     }
@@ -48,5 +51,11 @@ public class MemberController {
     @GetMapping("/members")
     public String profile() {
         return "member/profile";
+    }
+
+    // 개인 정보 수정 페이지
+    @GetMapping("/members/modify")
+    public String infoModify() {
+        return "members/infoModification";
     }
 }

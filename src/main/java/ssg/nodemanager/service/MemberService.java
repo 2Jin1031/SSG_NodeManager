@@ -3,6 +3,7 @@ package ssg.nodemanager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ssg.nodemanager.controller.LoginForm;
 import ssg.nodemanager.repository.MemberRepository;
 import ssg.nodemanager.domain.Member;
 
@@ -17,8 +18,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     // 로그인 검증
-    public boolean signIn(Member member) {
-        Optional<Member> optionalFindMember = memberRepository.findByLoginId(member.getLoginId());
+    public void signIn(LoginForm form) {
+        Optional<Member> optionalFindMember = memberRepository.findByLoginId(form.getLoginId());
 
         if (optionalFindMember.isEmpty()) {
             throw new IllegalStateException("[ERROR] id를 찾을 수 없음");
@@ -26,11 +27,9 @@ public class MemberService {
 
         Member findMember = optionalFindMember.get();
 
-        if (!Objects.equals(findMember.getPassword(), member.getPassword())) {
+        if (!Objects.equals(findMember.getPassword(), form.getPassword())) {
             throw new IllegalStateException("[ERROR] 비밀번호가 틀림");
         }
-
-        return true;
     }
 
     // 찾기
