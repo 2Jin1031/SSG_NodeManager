@@ -3,7 +3,7 @@ package ssg.nodemanager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssg.nodemanager.controller.LoginForm;
+import ssg.nodemanager.controller.member.LoginForm;
 import ssg.nodemanager.repository.MemberRepository;
 import ssg.nodemanager.domain.Member;
 

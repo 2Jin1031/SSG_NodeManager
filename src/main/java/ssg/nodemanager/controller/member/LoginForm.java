@@ -1,4 +1,4 @@
-package ssg.nodemanager.controller;
+package ssg.nodemanager.controller.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

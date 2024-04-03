@@ -1,4 +1,4 @@
-package ssg.nodemanager.controller;
+package ssg.nodemanager.controller.member;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
