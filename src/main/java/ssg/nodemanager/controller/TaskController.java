@@ -36,12 +36,7 @@ public class TaskController {
 
         // task가 존재하면 submissionDone 페이지로 리다이렉트
         if (taskExists) {
-            Task task = currentMember.getTask();
-            SubmissionInfo info = new SubmissionInfo();
-            info.setCurrentLevel(currentMember.getCurrentLevel());
-            info.setScoreStatus(task.getScoreStatus());
-
-            model.addAttribute("info", info);
+            getSubmissionInfo(currentMember.getTask(), currentMember, model);
             return "task/submissionDone";
         }
 
@@ -53,6 +48,7 @@ public class TaskController {
         return "task/submissionForm";
     }
 
+
     @PostMapping("/task/submission")
     public String submit(@RequestParam("url") String submissionUrl, HttpServletRequest request, Model model) {
         // 세션에서 로그인된 사용자 정보 가져오기
@@ -63,13 +59,7 @@ public class TaskController {
             return "redirect:/login";
         }
 
-        Task task = taskService.submit(currentMember, submissionUrl);
-
-        SubmissionInfo info = new SubmissionInfo();
-        info.setCurrentLevel(currentMember.getCurrentLevel());
-        info.setScoreStatus(task.getScoreStatus());
-
-        model.addAttribute("info", info);
+        getSubmissionInfo(taskService.submit(currentMember, submissionUrl), currentMember, model);
         return "task/submissionDone";
     }
 
@@ -82,5 +72,13 @@ public class TaskController {
         Task existingTask = member.getTask();
 
         return existingTask != null;
+    }
+
+    private static void getSubmissionInfo(Task task, Member member, Model model) {
+        SubmissionInfo info = new SubmissionInfo();
+        info.setCurrentLevel(member.getCurrentLevel());
+        info.setScoreStatus(task.getScoreStatus());
+
+        model.addAttribute("info", info);
     }
 }
