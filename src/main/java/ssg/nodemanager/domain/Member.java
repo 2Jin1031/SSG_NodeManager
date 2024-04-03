@@ -19,6 +19,9 @@ public class Member {
 
     private int currentLevel;
 
+    @OneToOne(mappedBy = "member")
+    private Task task;
+
     protected Member() {
 
     }

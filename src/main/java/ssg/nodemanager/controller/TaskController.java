@@ -1,6 +1,7 @@
 package ssg.nodemanager.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,21 @@ public class TaskController {
             return "redirect:/login";
         }
 
+        // task의 존재 여부를 확인하는 로직
+        boolean taskExists = checkIfTaskExists(currentMember);
+
+        // task가 존재하면 submissionDone 페이지로 리다이렉트
+        if (taskExists) {
+            Task task = currentMember.getTask();
+            SubmissionInfo info = new SubmissionInfo();
+            info.setCurrentLevel(currentMember.getCurrentLevel());
+            info.setScoreStatus(task.getScoreStatus());
+
+            model.addAttribute("info", info);
+            return "task/submissionDone";
+        }
+
+        // task가 존재하지 않으면 submissionForm 페이지로 이동
         SubmissionForm form = new SubmissionForm();
         form.setCurrentLevel(currentMember.getCurrentLevel());
 
@@ -55,5 +71,16 @@ public class TaskController {
 
         model.addAttribute("info", info);
         return "task/submissionDone";
+    }
+
+    @GetMapping("task/submissionDone")
+    public String submissionDone() {
+        return "task/submissionDone";
+    }
+
+    private boolean checkIfTaskExists(Member member) {
+        Task existingTask = member.getTask();
+
+        return existingTask != null;
     }
 }
