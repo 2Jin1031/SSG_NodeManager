@@ -32,7 +32,7 @@ public class MemberController {
         // loginId의 유효성 검사
         if (!StringUtils.hasText(form.getLoginId())) {
             model.addAttribute("loginError", "Login ID is required");
-            return "members/loginForm";
+            return "redirect:/login";
         }
 
         try {
@@ -40,17 +40,17 @@ public class MemberController {
 
             Member member = memberService.findByLoginId(form.getLoginId());
             request.getSession().setAttribute("loggedInMember", member);
-            return "members/profile";
+            return "redirect:/members";
         } catch (IllegalStateException e) {
-            model.addAttribute("loginError2", "아이디 또는 비밀번호가 맞지 않습니다.");
-            return "members/loginForm";
+            model.addAttribute("loginErrorByIdWithPassword", "아이디 또는 비밀번호가 맞지 않습니다.");
+            return "redirect:/login";
         }
     }
 
     // 개인페이지
     @GetMapping("/members")
     public String profile() {
-        return "member/profile";
+        return "members/profile";
     }
 
     // 개인 정보 수정 페이지
