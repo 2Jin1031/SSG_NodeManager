@@ -1,15 +1,16 @@
 package ssg.nodemanager.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ssg.nodemanager.service.MemberService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ssg.nodemanager.domain.Member;
+import ssg.nodemanager.service.MemberService;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class MemberController {
         }
 
         try {
+            // 아이디, 비번 검사
             memberService.signIn(form);
 
             Member member = memberService.findByLoginId(form.getLoginId());
@@ -47,7 +49,7 @@ public class MemberController {
         }
     }
 
-    // 개인페이지
+    // 개인 페이지
     @GetMapping("/members")
     public String profile() {
         return "members/profile";
