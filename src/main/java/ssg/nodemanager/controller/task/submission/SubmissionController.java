@@ -36,7 +36,7 @@ public class SubmissionController {
         // task의 존재 여부를 확인하는 로직
 
         Task task = currentMember.getTask();
-        if (task == null) { // task가 존재하지 않으면 submissionForm 페이지로 이동
+        if (task == null || !task.isSubmission()) { // task가 존재하지 않으면 submissionForm 페이지로 이동
             SubmissionForm form = new SubmissionForm();
             form.setCurrentLevel(currentMember.getCurrentLevel());
 

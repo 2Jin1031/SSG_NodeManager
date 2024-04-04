@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ssg.nodemanager.controller.task.submission.SubmissionForm;
 import ssg.nodemanager.domain.Member;
+import ssg.nodemanager.domain.ScoreStatus;
 import ssg.nodemanager.domain.Task;
 
 import java.util.Map;
@@ -29,10 +30,17 @@ public class AllocationController {
 
         // 현재 level 확인하는 로직
         Task task = currentMember.getTask();
+        if (task.getScoreStatus() == ScoreStatus.Success) {
+            task.setAllocation(true);
+        }
+
+        System.out.println("task.isAllocation() = " + task.isAllocation());
+
         if (task.isAllocation()) { // 과제 할당이 가능하다면
             // level 업데이트
             currentMember.setCurrentLevel(currentMember.getNextLevel());
             currentMember.setNextLevel(currentMember.getNextLevel() + 1);
+            task.setSubmission(false);
 
         }
         AllocationForm allocationForm = new AllocationForm();
