@@ -5,8 +5,12 @@ import org.springframework.stereotype.Repository;
 import ssg.nodemanager.domain.Member;
 import ssg.nodemanager.domain.Task;
 
-@Repository
-public interface TaskRepository extends JpaRepository<Member, Long> {
+import java.util.Optional;
 
-    void save(Task task);
+@Repository
+public interface TaskRepository extends JpaRepository<Task, Long> {
+
+//    void save(Task task);
+
+    Optional<Task> findByMember(Member member);
 }

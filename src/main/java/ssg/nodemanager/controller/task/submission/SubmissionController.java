@@ -13,13 +13,13 @@ import ssg.nodemanager.domain.Member;
 import ssg.nodemanager.domain.ScoreStatus;
 import ssg.nodemanager.domain.Task;
 import ssg.nodemanager.service.MemberService;
-import ssg.nodemanager.service.TaskService;
+import ssg.nodemanager.service.SubmissionService;
 
 @Controller
 @RequiredArgsConstructor
 public class SubmissionController {
 
-    private final TaskService taskService;
+    private final SubmissionService submissionService;
     private final MemberService memberService;
 
     //과제제출란
@@ -33,21 +33,15 @@ public class SubmissionController {
             return "redirect:/login";
         }
 
-        // task의 존재 여부를 확인하는 로직
-
-        Task task = currentMember.getTask();
-        if (task == null || !task.isSubmission()) { // task가 존재하지 않으면 submissionForm 페이지로 이동
-            SubmissionForm form = new SubmissionForm();
-            form.setCurrentLevel(currentMember.getCurrentLevel());
-
+        if (!submissionService.checkIfTaskExists(currentMember)) { // task가 존재하지 않으면 submissionForm 페이지로 이동
+            SubmissionForm form = submissionService.makeForm(currentMember, submissionService.findUrlByMember(currentMember));
             model.addAttribute("form", form);
             return "task/submissionForm";
         }
-//        boolean taskExists = checkIfTaskExists(currentMember);
 
         // task가 존재하면 /task/submission/complete 페이지로 리다이렉트
-        getSubmissionInfo(currentMember.getTask(), currentMember, model);
-        redirectAttributes.addFlashAttribute("info", model.asMap().get("info"));
+        SubmissionInfo info = submissionService.makeInfo(currentMember, submissionService.findUrlByMember(currentMember));
+        redirectAttributes.addFlashAttribute("info", info);
         return "redirect:/task/submission/complete";
 
     }
@@ -63,8 +57,9 @@ public class SubmissionController {
             return "redirect:/login";
         }
 
-        getSubmissionInfo(taskService.submit(currentMember, submissionUrl), currentMember, model);
-        redirectAttributes.addFlashAttribute("info", model.asMap().get("info"));
+        submissionService.submit(currentMember, submissionUrl);
+        SubmissionInfo info = submissionService.makeInfo(currentMember, submissionUrl);
+        redirectAttributes.addFlashAttribute("info", info);
         return "redirect:/task/submission/complete";
     }
 
@@ -73,24 +68,5 @@ public class SubmissionController {
         System.out.println("info.getCurrentLevel() = " + info.getCurrentLevel());
         System.out.println("info.getScoreStatus() = " + info.getScoreStatus());
         return "task/submissionDone";
-    }
-
-    private boolean checkIfTaskExists(Member member) {
-        Task existingTask = member.getTask();
-
-        return existingTask != null;
-    }
-
-    private static void getSubmissionInfo(Task task, Member member, Model model) {
-        SubmissionInfo info = new SubmissionInfo();
-        info.setCurrentLevel(member.getCurrentLevel());
-        info.setScoreStatus(task.getScoreStatus());
-        info.setNextLevel(member.getNextLevel());
-
-        if (ScoreStatus.Success.equals(task.getScoreStatus())) {
-            info.setSuccess(true);
-        }
-
-        model.addAttribute("info", info);
     }
 }
