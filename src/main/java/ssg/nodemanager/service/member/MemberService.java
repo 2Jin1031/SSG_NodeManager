@@ -1,4 +1,4 @@
-package ssg.nodemanager.service;
+package ssg.nodemanager.service.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

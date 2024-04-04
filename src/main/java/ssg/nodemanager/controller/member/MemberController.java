@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ssg.nodemanager.domain.Member;
-import ssg.nodemanager.service.MemberService;
+import ssg.nodemanager.service.member.MemberService;
 
 @Controller
 @RequiredArgsConstructor

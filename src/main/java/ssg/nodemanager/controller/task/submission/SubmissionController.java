@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ssg.nodemanager.domain.Member;
-import ssg.nodemanager.domain.ScoreStatus;
-import ssg.nodemanager.domain.Task;
-import ssg.nodemanager.service.MemberService;
-import ssg.nodemanager.service.SubmissionService;
+import ssg.nodemanager.service.member.MemberService;
+import ssg.nodemanager.service.task.SubmissionService;
 
 @Controller
 @RequiredArgsConstructor
