@@ -10,7 +10,5 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-//    void save(Task task);
-
     Optional<Task> findByMember(Member member);
 }

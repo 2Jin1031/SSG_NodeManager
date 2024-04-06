@@ -21,10 +21,18 @@ public class SubmissionService {
 
     // 과제 제출 로직 -> task update
     @Transactional
-    public void submit(Member member, String submissionUrl) {
-        Task task = new Task();
-        task.setMember(member);
-        task.setSubmissionUrl(submissionUrl);
+    public void submit(Member member, String url) {
+        Optional<Task> existingTask = taskRepository.findByMember(member);
+        Task task;
+        if (existingTask.isPresent()) {
+            task = existingTask.get();
+            // 기존 Task 업데이트 로직
+        } else {
+            task = new Task();
+            task.setMember(member);
+            // Task 초기화 로직
+        }
+        task.submission(url);
         task.setSubmission(true);
         task.setScoreStatus(ScoreStatus.Checking);
         taskRepository.save(task);
@@ -33,45 +41,41 @@ public class SubmissionService {
     // 과제 존재 유무
     public boolean checkIfTaskExists(Member member) {
         Task existingTask = member.getTask();
-        return existingTask != null || existingTask.isSubmission();
+        if (existingTask == null) return false;
+        return existingTask.isSubmission();
     }
 
     // 과제 제출 후 결과 Info 생성
-    public SubmissionInfo makeInfo(Member member, String submissionUrl) {
-        Optional<Task> optionalTask = taskRepository.findByMember(member);
-        if (optionalTask.isEmpty()) {
-            throw new IllegalStateException("Task가 비어있음");
-        }
-        Task task = optionalTask.get();
+    @Transactional
+    public SubmissionInfo makeInfo(Member member) {
+        Task task = findByMember(member);
 
         SubmissionInfo info = new SubmissionInfo();
         info.setCurrentLevel(member.getCurrentLevel());
         info.setScoreStatus(task.getScoreStatus());
         info.setNextLevel(member.getNextLevel());
 
-        if (ScoreStatus.Success == task.getScoreStatus()) {
-            info.setSuccess(true);
-        }
+        scoreCheck(task, info);
 
         return info;
     }
 
-    // 과제 제출 할 Form 생성
-    public SubmissionForm makeForm(Member member, String url) {
-        SubmissionForm form = new SubmissionForm();
-        form.setCurrentLevel(member.getCurrentLevel());
-        form.setSubmissionUrl(url);
-        return form;
+    @Transactional
+    public void scoreCheck(Task task, SubmissionInfo info) {
+        System.out.println("task.isAllocation() = " + task.isAllocation());
+        if (ScoreStatus.Success == task.getScoreStatus()) {
+            info.setSuccess(true);
+            task.setAllocation(true);
+        }
+        System.out.println("task.isAllocation() = " + task.isAllocation());
     }
 
-    // 멤버로 현재 과제 url 찾기
-    public String findUrlByMember(Member member) {
+    // 멤버로 과제 찾기
+    private Task findByMember(Member member) {
         Optional<Task> optionalTask = taskRepository.findByMember(member);
         if (optionalTask.isEmpty()) {
             throw new IllegalStateException("Task가 비어있음");
         }
-        Task task = optionalTask.get();
-        return task.getSubmissionUrl();
+        return optionalTask.get();
     }
-
 }

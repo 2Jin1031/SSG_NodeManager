@@ -7,6 +7,7 @@ import ssg.nodemanager.controller.member.LoginForm;
 import ssg.nodemanager.repository.MemberRepository;
 import ssg.nodemanager.domain.Member;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     // 로그인 검증
-    public void signIn(LoginForm form) {
+    public Member signIn(LoginForm form) {
         Optional<Member> optionalFindMember = memberRepository.findByLoginId(form.getLoginId());
 
         if (optionalFindMember.isEmpty()) {
@@ -30,6 +31,7 @@ public class MemberService {
         if (!Objects.equals(findMember.getPassword(), form.getPassword())) {
             throw new IllegalStateException("[ERROR] 비밀번호가 틀림");
         }
+        return findMember;
     }
 
     // 찾기
@@ -42,5 +44,10 @@ public class MemberService {
 
         return optionalFindMember.get();
 
+    }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다"));
     }
 }

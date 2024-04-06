@@ -5,51 +5,45 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ssg.nodemanager.controller.task.submission.SubmissionForm;
+import org.springframework.web.bind.annotation.PostMapping;
 import ssg.nodemanager.domain.Member;
-import ssg.nodemanager.domain.ScoreStatus;
 import ssg.nodemanager.domain.Task;
-
-import java.util.Map;
+import ssg.nodemanager.service.member.MemberService;
+import ssg.nodemanager.service.task.AllocationService;
 
 @Controller
 @RequiredArgsConstructor
 public class AllocationController {
 
+    private final AllocationService allocationService;
+    private final MemberService memberService;
+    
     // 과제할당란
     @GetMapping("/task/allocation")
-    public String allocationCheck(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
-        // 세션에서 로그인된 사용자 정보 가져오기
-        Member currentMember = (Member) request.getSession().getAttribute("loggedInMember");
+    public String allocationCheck(HttpServletRequest request,
+                                  Model model) {
+        // 세션에서 로그인된 사용자 id 가져오기
+        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
 
-        // 로그인된 사용자가 없으면 로그인 페이지로 리다이렉트
-        if (currentMember == null) {
+        // 로그인 id가 없으면 로그인 페이지로 리다이렉트
+        if (memberId == null) {
             return "redirect:/login";
         }
 
-        // 현재 level 확인하는 로직
+        Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
+
+        AllocationForm form = allocationService.checkAndPrepareAllocation(currentMember);
+        model.addAttribute("form", form);
+
         Task task = currentMember.getTask();
-        if (task.getScoreStatus() == ScoreStatus.Success) {
-            task.setAllocation(true);
-        }
 
-        System.out.println("task.isAllocation() = " + task.isAllocation());
-
-        if (task.isAllocation()) { // 과제 할당이 가능하다면
-            // level 업데이트
-            currentMember.setCurrentLevel(currentMember.getNextLevel());
-            currentMember.setNextLevel(currentMember.getNextLevel() + 1);
-            task.setSubmission(false);
-
-        }
-        AllocationForm allocationForm = new AllocationForm();
-        Map<Integer, String> allocationMapByLevel = task.getAllocationMapByLevel();
-        allocationForm.setCurrectLevel(currentMember.getCurrentLevel());
-        allocationForm.setAllocationUrl(allocationMapByLevel.get(currentMember.getCurrentLevel()));
-
-        model.addAttribute("form", allocationForm);
         // 할당 페이지로 return
         return "task/allocationForm";
+    }
+
+    //과제할당란 페이지에 들어왔었는지
+    @PostMapping("/task/allocation")
+    public String allovationVisit() {
+        return null;
     }
 }

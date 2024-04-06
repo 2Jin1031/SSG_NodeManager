@@ -38,10 +38,9 @@ public class MemberController {
 
         try {
             // 아이디, 비번 검사
-            memberService.signIn(form);
+            Member member = memberService.signIn(form);
 
-            Member member = memberService.findByLoginId(form.getLoginId());
-            request.getSession().setAttribute("loggedInMember", member);
+            request.getSession().setAttribute("loggedInMemberId", member.getId());
             return "redirect:/members";
         } catch (IllegalStateException e) {
             model.addAttribute("loginErrorByIdWithPassword", "아이디 또는 비밀번호가 맞지 않습니다.");

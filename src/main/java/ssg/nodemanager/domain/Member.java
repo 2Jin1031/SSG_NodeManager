@@ -34,5 +34,9 @@ public class Member {
         this.nextLevel = 2;
     }
 
+    public void levelUP(int currentLevel) {
+        this.currentLevel = currentLevel + 1;
+        this.nextLevel = this.currentLevel + 1;
+    }
 
 }
