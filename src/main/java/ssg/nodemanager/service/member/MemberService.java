@@ -7,6 +7,7 @@ import ssg.nodemanager.controller.member.LoginForm;
 import ssg.nodemanager.repository.MemberRepository;
 import ssg.nodemanager.domain.Member;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,5 +50,27 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다"));
+    }
+
+    public int getMaxLevel() {
+        List<Member> members = memberRepository.findAll();
+        int maxLevel = 0;
+        for (Member member : members) {
+            if (member.getCurrentLevel() > maxLevel || maxLevel == 0) {
+                maxLevel = member.getCurrentLevel();
+            }
+        }
+        return maxLevel;
+    }
+
+    public int getMinLevel(){
+        List<Member> members = memberRepository.findAll();
+        int minLevel = 0;
+        for (Member member : members) {
+            if (member.getCurrentLevel() < minLevel || minLevel == 0) {
+                minLevel = member.getCurrentLevel();
+            }
+        }
+        return minLevel;
     }
 }

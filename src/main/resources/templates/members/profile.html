@@ -6,6 +6,8 @@
 </head>
 <body>
 <h1>개인페이지</h1>
+<h2 th:text="'최고 레벨: ' + ${maxLevel}"></h2>
+<h2 th:text="'최저 레벨: ' + ${minLevel}"></h2>
 <ul>
   <li><a href="/members/modify">개인정보수정</a></li>
   <li><a href="/task/allocation">과제란</a></li>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ssg.nodemanager.domain.Member;
+import ssg.nodemanager.service.RankService;
 import ssg.nodemanager.service.member.MemberService;
 
 @Controller
@@ -17,6 +18,7 @@ import ssg.nodemanager.service.member.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RankService rankService;
 
     // 로그인
     @GetMapping("/login")
@@ -50,7 +52,11 @@ public class MemberController {
 
     // 개인 페이지
     @GetMapping("/members")
-    public String profile() {
+    public String profile(Model model) {
+        int maxLevel = memberService.getMaxLevel();
+        int minLevel = memberService.getMinLevel();
+        model.addAttribute("maxLevel", maxLevel);
+        model.addAttribute("minLevel", minLevel);
         return "members/profile";
     }
 
