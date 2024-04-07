@@ -62,12 +62,10 @@ public class SubmissionService {
 
     @Transactional
     public void scoreCheck(Task task, SubmissionInfo info) {
-        System.out.println("task.isAllocation() = " + task.isAllocation());
         if (ScoreStatus.Success == task.getScoreStatus()) {
             info.setSuccess(true);
             task.setAllocation(true);
         }
-        System.out.println("task.isAllocation() = " + task.isAllocation());
     }
 
     // 멤버로 과제 찾기

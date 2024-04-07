@@ -34,8 +34,6 @@ public class SubmissionController {
         Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
 
         if (!submissionService.checkIfTaskExists(currentMember)) { // task가 존재하지 않거나 제출되지 않으면 submissionForm 페이지로 이동
-            System.out.println("in task가 존재하지 않거나 제출할당 되지 않으면의 if문에 들어왔습니다");
-
             SubmissionForm form = new SubmissionForm();
             form.setCurrentLevel(currentMember.getCurrentLevel());
             model.addAttribute("form", form);
