@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -32,6 +34,10 @@ public class Member {
         this.password = password;
         this.currentLevel = 1;
         this.nextLevel = 2;
+    }
+
+    public boolean isCorrectPassword(String password) {
+        return Objects.equals(this.getPassword(), password);
     }
 
     public void levelUP(int currentLevel) {

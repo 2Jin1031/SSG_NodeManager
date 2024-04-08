@@ -29,7 +29,7 @@ public class MemberService {
 
         Member findMember = optionalFindMember.get();
 
-        if (!Objects.equals(findMember.getPassword(), form.getPassword())) {
+        if (!findMember.isCorrectPassword(form.getPassword())) {
             throw new IllegalStateException("[ERROR] 비밀번호가 틀림");
         }
         return findMember;
