@@ -8,7 +8,7 @@
 <h2>Task Submission Page</h2>
 <form action="#" th:action="@{/task/submission}" th:object="${form}" method="post">
     <div>
-        <p>현재 과제 level: <span th:text="${form.currentLevel}"></span></p>
+        <p>현재 과제 레벨: <span th:text="${form.currentLevel}"></span></p>
         <label for="url">URL:</label>
         <input type="text" id="url" name="url" th:value="*{submissionUrl}" required/>
     </div>
