@@ -1,6 +1,9 @@
+server:
+  port: 9090
+
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/nodeDB #;MODE=LEGACY
+    url: jdbc:h2:tcp://10.2.0.51:8082/~/lala;DB_CLOSE_DELAY=-1 #;MODE=LEGACY
     username: sa
     password:
     driver-class-name: org.h2.Driver
