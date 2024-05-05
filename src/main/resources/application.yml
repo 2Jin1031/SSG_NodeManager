@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://10.2.0.51:8082/~/lala;DB_CLOSE_DELAY=-1 #;MODE=LEGACY
+    url: jdbc:h2:~/lala #;MODE=LEGACY
     username: sa
     password:
     driver-class-name: org.h2.Driver
