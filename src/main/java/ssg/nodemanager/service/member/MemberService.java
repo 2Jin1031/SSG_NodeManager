@@ -85,4 +85,16 @@ public class MemberService {
         memberRepository.save(member);
         memberRepository.flush();
     }
+
+    @Transactional
+    public void updatePassword(Long memberId, String newPassword) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+        if (member.hasChangedPassword()) {
+            throw new IllegalArgumentException("비밀번호는 한 번만 변경할 수 있습니다.");
+        }
+        member.setPassword(newPassword);
+        member.setHasChangedPassword(true);
+        memberRepository.save(member);
+        memberRepository.flush();
+    }
 }

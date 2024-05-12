@@ -68,6 +68,7 @@ public class MemberController {
         Member member = memberService.findById(memberId);
         model.addAttribute("member", member);
         model.addAttribute("canChangeId", !member.isHasChangedLoginId());
+        model.addAttribute("canChangePassword", !member.isHasChangedPassword());
         return "members/infoModification";
     }
 
@@ -85,6 +86,26 @@ public class MemberController {
         try {
             memberService.updateLoginId(memberId, newLoginId);
             redirectAttributes.addFlashAttribute("updateSuccess", "아이디가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("updateError", e.getMessage());
+        }
+        return "redirect:/members";
+    }
+
+    // 비밀번호 변경 처리
+    @PostMapping("/members/modify/password")
+    public String updatePassword(@RequestParam("newPassword") String newPassword,
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes) {
+        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("updateError", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+
+        try {
+            memberService.updatePassword(memberId, newPassword);
+            redirectAttributes.addFlashAttribute("updateSuccess", "비밀번호가 성공적으로 변경되었습니다.");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("updateError", e.getMessage());
         }
