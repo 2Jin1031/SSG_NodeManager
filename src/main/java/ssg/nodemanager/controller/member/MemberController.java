@@ -18,7 +18,6 @@ import ssg.nodemanager.service.member.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
-    private final RankService rankService;
 
     // 로그인
     @GetMapping("/login")
