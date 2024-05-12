@@ -23,6 +23,8 @@ public class Member {
 
     private int nextLevel;
 
+    private boolean hasChangedLoginId;
+
     @OneToOne(mappedBy = "member")
     private Task task;
 
@@ -34,10 +36,19 @@ public class Member {
         this.password = password;
         this.currentLevel = 1;
         this.nextLevel = 2;
+        this.hasChangedLoginId = false;
     }
 
     public boolean isCorrectPassword(String password) {
         return Objects.equals(this.getPassword(), password);
+    }
+
+    public boolean hasChangedLoginId() {
+        return hasChangedLoginId;
+    }
+
+    public void setHasChangedLoginId(boolean hasChangedLoginId) {
+        this.hasChangedLoginId = hasChangedLoginId;
     }
 
     public void levelUP(int currentLevel) {

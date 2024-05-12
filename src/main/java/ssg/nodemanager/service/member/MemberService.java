@@ -73,4 +73,16 @@ public class MemberService {
         }
         return minLevel;
     }
+
+    @Transactional
+    public void updateLoginId(Long memberId, String newLoginId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+        if (member.hasChangedLoginId()) {
+            throw new IllegalArgumentException("아이디는 한 번만 변경할 수 있습니다.");
+        }
+        member.setLoginId(newLoginId);
+        member.setHasChangedLoginId(true);
+        memberRepository.save(member);
+        memberRepository.flush();
+    }
 }

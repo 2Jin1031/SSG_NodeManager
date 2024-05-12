@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ssg.nodemanager.domain.Member;
 import ssg.nodemanager.service.RankService;
 import ssg.nodemanager.service.member.MemberService;
@@ -61,7 +59,35 @@ public class MemberController {
 
     // 개인 정보 수정 페이지
     @GetMapping("/members/modify")
-    public String infoModify() {
+    public String infoModify(HttpServletRequest request, Model model) {
+        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        if (memberId == null) {
+            return "redirect:/login";
+        }
+
+        Member member = memberService.findById(memberId);
+        model.addAttribute("member", member);
+        model.addAttribute("canChangeId", !member.isHasChangedLoginId());
         return "members/infoModification";
+    }
+
+    // 아이디 변경 처리
+    @PostMapping("/members/modify/id")
+    public String updateLoginId(@RequestParam("newLoginId") String newLoginId,
+                                HttpServletRequest request,
+                                RedirectAttributes redirectAttributes) {
+        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        if (memberId == null) {
+            redirectAttributes.addFlashAttribute("updateError", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+
+        try {
+            memberService.updateLoginId(memberId, newLoginId);
+            redirectAttributes.addFlashAttribute("updateSuccess", "아이디가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("updateError", e.getMessage());
+        }
+        return "redirect:/members";
     }
 }
