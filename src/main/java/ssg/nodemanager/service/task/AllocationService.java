@@ -48,10 +48,18 @@ public class AllocationService {
         member.levelUP(member.getCurrentLevel());
     }
 
-    private Task findByMember(Member currentMember) {
+    @Transactional
+    public Task findByMember(Member currentMember) {
         Optional<Task> optionalTask = taskRepository.findByMember(currentMember);
-        if (optionalTask.isEmpty()) {
-            throw new IllegalStateException("task 존재하지 않음");
+
+        if (optionalTask.isEmpty() && currentMember.getCurrentLevel() == 1) {
+            Task task = new Task();
+            task.setMember(currentMember);
+            taskRepository.save(task);
+            return task;
+        }
+        else if (optionalTask.isEmpty()) {
+            throw new IllegalStateException("task가 존재하지 않습니다");
         }
 
         Task task = optionalTask.get();
