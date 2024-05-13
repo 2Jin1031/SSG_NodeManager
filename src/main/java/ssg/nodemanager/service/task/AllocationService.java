@@ -21,9 +21,7 @@ public class AllocationService {
     @Transactional
     public AllocationForm checkAndPrepareAllocation(Member currentMember) {
         Task task = findByMember(currentMember);
-
         allocationLogic(currentMember, task);
-
         return makeForm(currentMember, task);
     }
 
