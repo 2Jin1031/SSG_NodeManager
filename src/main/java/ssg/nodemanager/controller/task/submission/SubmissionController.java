@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ssg.nodemanager.domain.Member;
-import ssg.nodemanager.service.member.MemberService;
 import ssg.nodemanager.service.task.SubmissionService;
 
 @Controller
@@ -16,21 +15,16 @@ import ssg.nodemanager.service.task.SubmissionService;
 public class SubmissionController {
 
     private final SubmissionService submissionService;
-    private final MemberService memberService;
 
     //과제제출란
     @GetMapping("/task/submission")
     public String submissionCheck(HttpServletRequest request,
                                   Model model) {
-        // 세션에서 로그인된 사용자 id 가져오기
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        Member currentMember = (Member) request.getAttribute("currentMember");
 
-        // 로그인 id가 없으면 로그인 페이지로 리다이렉트
-        if (memberId == null) {
+        if (currentMember == null) {
             return "redirect:/login";
         }
-
-        Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
 
         if (!submissionService.hasTask(currentMember)) { // task가 존재하지 않거나 제출되지 않으면 submissionForm 페이지로 이동
             SubmissionForm form = new SubmissionForm();
@@ -51,15 +45,11 @@ public class SubmissionController {
     @PostMapping("/task/submission")
     public String submit(@RequestParam("url") String submissionUrl,
                          HttpServletRequest request) {
-        // 세션에서 로그인된 사용자 id 가져오기
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        Member currentMember = (Member) request.getAttribute("currentMember");
 
-        // 로그인 id가 없으면 로그인 페이지로 리다이렉트
-        if (memberId == null) {
+        if (currentMember == null) {
             return "redirect:/login";
         }
-
-        Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
 
         submissionService.submit(currentMember, submissionUrl);
         SubmissionInfo info = submissionService.makeInfo(currentMember);
@@ -71,15 +61,11 @@ public class SubmissionController {
     @GetMapping("task/submission/complete")
     public String submissionDone(HttpServletRequest request,
                                  Model model) {
-        // 세션에서 로그인된 사용자 id 가져오기
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        Member currentMember = (Member) request.getAttribute("currentMember");
 
-        // 로그인 id가 없으면 로그인 페이지로 리다이렉트
-        if (memberId == null) {
+        if (currentMember == null) {
             return "redirect:/login";
         }
-
-        Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
 
         // 세션에서 SubmissionInfo 객체를 가져옵니다.
         SubmissionInfo info = (SubmissionInfo) request.getSession().getAttribute("info");
