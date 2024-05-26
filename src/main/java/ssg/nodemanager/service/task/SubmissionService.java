@@ -3,7 +3,6 @@ package ssg.nodemanager.service.task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssg.nodemanager.controller.task.submission.SubmissionForm;
 import ssg.nodemanager.controller.task.submission.SubmissionInfo;
 import ssg.nodemanager.domain.Member;
 import ssg.nodemanager.domain.ScoreStatus;
@@ -39,7 +38,7 @@ public class SubmissionService {
     }
 
     // 과제 존재 유무
-    public boolean checkIfTaskExists(Member member) {
+    public boolean hasTask(Member member) {
         Task existingTask = member.getTask();
         if (existingTask == null) return false;
         return existingTask.isSubmission();
