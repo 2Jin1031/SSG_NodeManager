@@ -54,13 +54,13 @@ public class SubmissionService {
         info.setScoreStatus(task.getScoreStatus());
         info.setNextLevel(member.getNextLevel());
 
-        scoreCheck(task, info);
+        allocateByScore(task, info);
 
         return info;
     }
 
     @Transactional
-    public void scoreCheck(Task task, SubmissionInfo info) {
+    public void allocateByScore(Task task, SubmissionInfo info) {
         if (ScoreStatus.Success == task.getScoreStatus()) {
             info.setSuccess(true);
             task.setAllocation(true);
