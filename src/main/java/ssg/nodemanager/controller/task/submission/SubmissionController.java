@@ -22,10 +22,6 @@ public class SubmissionController {
                                   Model model) {
         Member currentMember = (Member) request.getAttribute("currentMember");
 
-        if (currentMember == null) {
-            return "redirect:/login";
-        }
-
         if (!submissionService.hasTask(currentMember)) { // task가 존재하지 않거나 제출되지 않으면 submissionForm 페이지로 이동
             SubmissionForm form = new SubmissionForm();
             form.setCurrentLevel(currentMember.getCurrentLevel());
@@ -47,10 +43,6 @@ public class SubmissionController {
                          HttpServletRequest request) {
         Member currentMember = (Member) request.getAttribute("currentMember");
 
-        if (currentMember == null) {
-            return "redirect:/login";
-        }
-
         submissionService.submit(currentMember, submissionUrl);
         SubmissionInfo info = submissionService.makeInfo(currentMember);
         request.getSession().setAttribute("info", info);
@@ -62,10 +54,6 @@ public class SubmissionController {
     public String submissionDone(HttpServletRequest request,
                                  Model model) {
         Member currentMember = (Member) request.getAttribute("currentMember");
-
-        if (currentMember == null) {
-            return "redirect:/login";
-        }
 
         // 세션에서 SubmissionInfo 객체를 가져옵니다.
         SubmissionInfo info = (SubmissionInfo) request.getSession().getAttribute("info");
