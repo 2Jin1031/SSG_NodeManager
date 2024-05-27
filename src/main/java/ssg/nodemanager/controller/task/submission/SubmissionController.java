@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ssg.nodemanager.domain.Member;
+import ssg.nodemanager.service.member.MemberService;
 import ssg.nodemanager.service.task.SubmissionService;
 
 @Controller
@@ -15,6 +16,7 @@ import ssg.nodemanager.service.task.SubmissionService;
 public class SubmissionController {
 
     private final SubmissionService submissionService;
+    private final MemberService memberService;
 
     //과제제출란
     @GetMapping("/task/submission")
@@ -41,7 +43,21 @@ public class SubmissionController {
     @PostMapping("/task/submission")
     public String submit(@RequestParam("url") String submissionUrl,
                          HttpServletRequest request) {
-        Member currentMember = (Member) request.getAttribute("currentMember");
+        // 세션에서 Member ID를 가져옴
+        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
+        if (memberId == null) {
+            // 로그 출력
+            System.out.println("Member ID is null. User might not be logged in.");
+            return "redirect:/login";  // 로그인 페이지로 리다이렉트
+        }
+
+        // Member 객체 조회
+        Member currentMember = memberService.findById(memberId);
+        if (currentMember == null) {
+            // 로그 출력
+            System.out.println("Member not found for ID: " + memberId);
+            return "redirect:/login";  // 로그인 페이지로 리다이렉트
+        }
 
         submissionService.submit(currentMember, submissionUrl);
         SubmissionInfo info = submissionService.makeInfo(currentMember);
