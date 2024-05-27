@@ -39,7 +39,6 @@ public class SubmissionController {
 
     }
 
-
     @PostMapping("/task/submission")
     public String submit(@RequestParam("url") String submissionUrl,
                          HttpServletRequest request) {
