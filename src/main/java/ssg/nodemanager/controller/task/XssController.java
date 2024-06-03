@@ -46,11 +46,11 @@ public class XssController {
                                 HttpSession session) {
 
         // HTML 이스케이프 처리하여 저장
-        String escapedContent = StringEscapeUtils.escapeHtml4(content);
-        xssService.addContent(escapedContent);
+//        String escapedContent = StringEscapeUtils.escapeHtml4(content);
+        xssService.addContent(content);
 
         // 세션에 현재 콘텐츠 저장
-        session.setAttribute("currentContent", escapedContent);
+        session.setAttribute("currentContent", content);
         model.addAttribute("submittedContents", xssService.getSubmittedContents());
 
         return "redirect:/task/submissionForm";
