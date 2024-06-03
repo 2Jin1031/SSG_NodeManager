@@ -11,10 +11,33 @@
         <p>현재 과제 레벨: <span th:text="${form.currentLevel}"></span></p>
         <label for="url">URL:</label>
         <input type="text" id="url" name="url" th:value="*{submissionUrl}" required/>
+        <input type="hidden" name="currentLevel" th:value="*{currentLevel}" />
     </div>
     <div>
         <button type="submit">Submit</button>
     </div>
 </form>
+
+<div th:if="${form.currentLevel == 6}">
+    <h3>XSS 실습</h3>
+    <!-- Content Form -->
+    <form action="#" th:action="@{/task/submitContent}" method="post">
+        <div>
+            <label for="content">Content:</label>
+            <input type="text" id="content" name="content" required/>
+        </div>
+        <div>
+            <button type="submit">Submit Content</button>
+        </div>
+    </form>
+
+    <!-- Result Form -->
+    <div>
+        <h4>Submitted Contents:</h4>
+        <div th:each="submittedContent : ${submittedContents}">
+            <p th:utext="${submittedContent}"></p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
