@@ -3,18 +3,14 @@ package ssg.nodemanager.controller.task;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ssg.nodemanager.config.ConfigConstants;
 import ssg.nodemanager.controller.task.submission.SubmissionForm;
-import ssg.nodemanager.controller.task.submission.SubmissionInfo;
-import ssg.nodemanager.service.task.SubmissionService;
-import ssg.nodemanager.service.task.XssService;
 import ssg.nodemanager.domain.Member;
+import ssg.nodemanager.service.task.XssService;
 
 @Controller
 @RequiredArgsConstructor
