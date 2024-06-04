@@ -16,21 +16,13 @@ import ssg.nodemanager.service.task.AllocationService;
 public class AllocationController {
 
     private final AllocationService allocationService;
-    private final MemberService memberService;
-    
+
     // 과제할당란
     @GetMapping("/task/allocation")
     public String allocationCheck(HttpServletRequest request,
                                   Model model) {
-        // 세션에서 로그인된 사용자 id 가져오기
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
-
-        // 로그인 id가 없으면 로그인 페이지로 리다이렉트
-        if (memberId == null) {
-            return "redirect:/login";
-        }
-
-        Member currentMember = memberService.findById(memberId); // 데이터베이스에서 최신 Member 정보 조회
+        // Member 객체 조회
+        Member currentMember = (Member) request.getSession().getAttribute("currentMember");
 
         AllocationForm form = allocationService.checkAndPrepareAllocation(currentMember);
         model.addAttribute("form", form);

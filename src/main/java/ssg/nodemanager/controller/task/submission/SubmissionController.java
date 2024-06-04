@@ -17,30 +17,14 @@ import ssg.nodemanager.service.task.XssService;
 public class SubmissionController {
 
     private final SubmissionService submissionService;
-    private final MemberService memberService;
     private final XssService xssService;
 
     //과제제출란
     @GetMapping("/task/submission")
     public String submissionCheck(HttpServletRequest request,
                                   Model model) {
-        // 세션에서 Member ID를 가져옴
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
-        if (memberId == null) {
-            // 로그 출력
-            System.out.println("Member ID is null. User might not be logged in.");
-            return "redirect:/login";  // 로그인 페이지로 리다이렉트
-        }
-
         // Member 객체 조회
-        Member currentMember = memberService.findById(memberId);
-        if (currentMember == null) {
-            // 로그 출력
-            System.out.println("Member not found for ID: " + memberId);
-            return "redirect:/login";  // 로그인 페이지로 리다이렉트
-        }
-
-        request.getSession().setAttribute("currentMember", currentMember);
+        Member currentMember = (Member) request.getSession().getAttribute("currentMember");
 
         if (!submissionService.hasTask(currentMember)) { // task가 존재하지 않거나 제출되지 않으면 submissionForm 페이지로 이동
             SubmissionForm form = new SubmissionForm();
@@ -65,21 +49,8 @@ public class SubmissionController {
     @PostMapping("/task/submission")
     public String submit(@RequestParam("url") String submissionUrl,
                          HttpServletRequest request) {
-        // 세션에서 Member ID를 가져옴
-        Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
-        if (memberId == null) {
-            // 로그 출력
-            System.out.println("Member ID is null. User might not be logged in.");
-            return "redirect:/login";  // 로그인 페이지로 리다이렉트
-        }
-
         // Member 객체 조회
-        Member currentMember = memberService.findById(memberId);
-        if (currentMember == null) {
-            // 로그 출력
-            System.out.println("Member not found for ID: " + memberId);
-            return "redirect:/login";  // 로그인 페이지로 리다이렉트
-        }
+        Member currentMember = (Member) request.getSession().getAttribute("currentMember");
 
         submissionService.submit(currentMember, submissionUrl);
         SubmissionInfo info = submissionService.makeInfo(currentMember);

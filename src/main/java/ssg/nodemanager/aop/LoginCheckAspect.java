@@ -16,7 +16,7 @@ public class LoginCheckAspect {
 
     private final MemberService memberService;
 
-    @Before("execution(* ssg.nodemanager.controller.task.submission.SubmissionController.*(..)) && args(request, ..)")
+    @Before("execution(* ssg.nodemanager.controller.task..*(..)) && args(request, ..)")
     public void checkLogin(HttpServletRequest request) throws NotLoggedInException {
         Long memberId = (Long) request.getSession().getAttribute("loggedInMemberId");
         if (memberId == null) {
@@ -24,6 +24,6 @@ public class LoginCheckAspect {
         }
 
         Member currentMember = memberService.findById(memberId);
-        request.setAttribute("currentMember", currentMember);
+        request.getSession().setAttribute("currentMember", currentMember);
     }
 }

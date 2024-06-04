@@ -19,8 +19,8 @@ public class XssController {
     private final XssService xssService;
 
     @GetMapping("/task/submissionForm")
-    public String showSubmissionForm(Model model,
-                                     HttpServletRequest request) {
+    public String showSubmissionForm(HttpServletRequest request,
+                                     Model model) {
 
         HttpSession session = request.getSession();
         Member currentMember = (Member) session.getAttribute("currentMember");
