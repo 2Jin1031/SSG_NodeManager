@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ssg.nodemanager.controller.task.allocation.AllocationForm;
 import ssg.nodemanager.domain.Member;
 import ssg.nodemanager.domain.Task;
+import ssg.nodemanager.repository.TaskAllocationMapRepository;
 import ssg.nodemanager.repository.TaskRepository;
 
 import java.util.Map;
@@ -17,12 +18,13 @@ import java.util.Optional;
 public class AllocationService {
 
     private final TaskRepository taskRepository;
+    private final TaskAllocationMapRepository taskAllocationMapRepository;
 
     @Transactional
     public AllocationForm checkAndPrepareAllocation(Member currentMember) {
         Task task = findByMember(currentMember);
         allocationLogic(currentMember, task);
-        return makeForm(currentMember, task);
+        return makeForm(currentMember);
     }
 
     @Transactional
@@ -35,11 +37,10 @@ public class AllocationService {
         }
     }
 
-    private static AllocationForm makeForm(Member currentMember, Task task) {
+    private AllocationForm makeForm(Member currentMember) {
         AllocationForm allocationForm = new AllocationForm();
-        Map<Integer, String> allocationMapByLevel = task.getAllocationMapByLevel();
         allocationForm.setCurrectLevel(currentMember.getCurrentLevel());
-        allocationForm.setAllocationUrl(allocationMapByLevel.get(currentMember.getCurrentLevel()));
+        allocationForm.setAllocationUrl(taskAllocationMapRepository.findUrlByLevel(currentMember.getCurrentLevel()));
         return allocationForm;
     }
 
